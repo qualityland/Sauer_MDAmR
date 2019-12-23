@@ -85,7 +85,10 @@ attr(vec, "Autor") <- "Stefan Schmidt"
 attributes(vec)
 
 attr(named_vec, "Autor") <- "Stefan Schmidt"
+attr(named_vec, "Datum") <- 2019
 attributes(named_vec)
+# calling shows data and attributes
+named_vec
 
 
 ## factors
@@ -105,7 +108,7 @@ age_numeric
 str(age_numeric)
 
 
-## data frames
+## data frame vs. tibble
 
 # data.frame (default: strings as factors)
 df1 <- data.frame(essen = c("Suppe", "Suppe", "Pizza",),
@@ -117,3 +120,52 @@ library(tibble)
 df2 <- tibble(essen = c("Suppe", "Suppe", "Pizza"),
               geschmack = c(2, 2, 5))
 str(df2)
+
+
+## subsetting basics
+x <- c(2.2, 3.3, 4.4)
+
+# single index
+x[1]
+
+# multiple index
+x[c(1, 2)]
+# same index several times
+x[c(1, 1, 2, 1)]
+
+# negative index excludes
+x[-1]
+# works with multiple index
+x[-c(1, 2)]
+
+# logical index
+x[c(TRUE, TRUE, FALSE)]
+
+# locical expressions
+x[x > 3]
+# reason: expression returns logical vector
+x > 3
+
+# names
+noten <- c("Anna" = 1.3, "Berta" = 2.7, "Carla" = 4.3)
+noten["Anna"]
+noten[c("Anna", "Anna", "Carla")]
+
+## data frames
+
+# todesfaelle ZH 1995 - 2017
+df <- read.csv("./data/bev312od3120.csv")
+
+# subsetting with [] returns a data frame
+class(df[1])
+class(df[1,])
+class(df["StichtagDatJahr"])
+
+# subsetting with [[]] or $ returns a vector
+class(df[[1]])
+class(df[["StichtagDatJahr"]])
+class(df$StichtagDatJahr)
+
+
+# subsetting df elements
+df[2, c(1, 2)]
