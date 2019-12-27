@@ -145,3 +145,52 @@ stats_test %>%
     summarize(sqrt(score_var))
 
 sd(stats_test$score, na.rm = TRUE)
+
+
+## suffixes
+# _if
+# mean of all numeric columns
+stats_test %>% 
+    summarize_if(is.numeric, mean, na.rm = TRUE)
+
+# _all
+# sum of NAs for each column
+stats_test %>% 
+    summarize_all(list(NAs = ~is.na(.) %>% sum))
+
+# min() and max() for each column
+stats_test %>%
+    summarize_all(list(max = max, min = min), na.rm = TRUE)
+
+# _at
+# execute summarize function only for certain columns
+stats_test %>% 
+    summarize_at(.vars = vars(study_time, self_eval),
+                 list(min = min, max = max), na.rm = TRUE)
+# same using .funs
+stats_test %>% 
+    summarize_at(.vars = vars(study_time, self_eval),
+                 .funs = funs(min = min, max = max), na.rm = TRUE)
+
+# calculate a proportion to maximum value
+stats_test %>% 
+    drop_na() %>% 
+    mutate_at(.vars = vars(study_time, self_eval, interest),
+              .funs = funs(prop = ./max(.))) %>% 
+    select(contains("_prop"))
+
+
+## join() - add columns from another dataframe
+
+# join airline name to flights
+flights_joined <- flights %>%
+    inner_join(airlines, by = "carrier")
+
+head(flights_joined[, c("year",
+                        "month",
+                        "day",
+                        "carrier",
+                        "name",
+                        "dep_delay",
+                        "arr_delay")])
+
